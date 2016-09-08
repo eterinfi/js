@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>My Clock</title>
+  <style>
+    body
+	{ 
+	  padding: 0; 
+	  margin: 0; 
+	  background-color: silver;
+	}
+	div#leftBox
+	{
+	  position: fixed;
+	  left: 0;
+	  top: 0;
+      width: 30%;
+	  height: 100%;
+	}
+    div#rightBox
+	{
+	  position: fixed;
+	  right: 0;
+	  top: 0;
+      width: 30%;
+	  height: 100%;
+	}
+	div#bottomBox
+	{
+	  position: fixed;
+	  right: 0;
+	  bottom: 0;
+	  width: 100%;
+	  height: 10%;
+	}
+  </style>
+</head>
+<body onload = "myClock()">
+  <div id = "leftBox">
+  </div>
+  <canvas id = "myCanvas"></canvas>
+  <div id = "bottomBox"></div>
+  <div id = "rightBox">
+  </div>
+<script>
+function myClock()
+{
+  var color = new Array( "red", "olive", "yellow", "green", "lime", "teal", "aqua", "navy", "blue", "purple", "fuchsia", "maroon" );
+  ww = innerWidth;
+  wh = innerHeight;
+  c = document.getElementById("myCanvas");
+  c.width = ww;
+  c.height = wh * 0.93;
+  cw = c.width * 0.5;
+  ch = c.height * 0.5;
+  cxt = c.getContext("2d");
+  r = Math.min(cw, ch) * 0.9;
+  cxt.clearRect(0, 0, c.width, c.height);
+  cxt.translate(cw, ch);
+  cxt.fillStyle = "gray";
+  cxt.beginPath();
+  cxt.arc(0, 0, r, 0, Math.PI * 2, true);
+  cxt.fill();
+  cxt.fillStyle = "black";
+  cxt.beginPath();
+  cxt.arc(0, 0, r * 0.03, 0, Math.PI * 2, true);
+  cxt.fill();
+  cxt.lineWidth = r * 0.02;
+  cxt.beginPath();
+  cxt.arc(0, 0, r, 0, Math.PI * 2, true);
+  for (var m = 0; m < 60; m++)
+  {
+    if (m % 5 == 0)
+	  cxt.moveTo( 0.9 * r * Math.sin( m * Math.PI / 30 ), - 0.9 * r * Math.cos( m * Math.PI / 30 ));
+	else
+      cxt.moveTo( 0.95 * r * Math.sin( m * Math.PI / 30 ), - 0.95 * r * Math.cos( m * Math.PI / 30 ));
+    cxt.lineTo( r * Math.sin( m * Math.PI / 30 ), - r * Math.cos( m * Math.PI / 30 ));
+    cxt.stroke();  
+  }
+  for (var h=0; h < 12; h++)
+  {
+	cxt.font = "bold " + r * 0.2 + "px sans-serif";
+	cxt.fillStyle = color[h];
+	cxt.textAlign = "center";
+	cxt.fillText( h, 0.8 * r * Math.sin( h * Math.PI / 6 ), - 0.8 * r * Math.cos( h * Math.PI / 6 ) + 0.075 * r );
+  }
+  cxt.font = "bold " + r * 0.15 + "px '楷体'";
+  cxt.fillStyle = "white";
+  cxt.fillText("网络时钟", 0, - 0.4 * r);
+  cxt.fillText("自动校时", 0, 0.5 * r);
+  cxt.fillStyle = "black";
+  now = new Date();
+  yr = now.getFullYear();
+  mo = now.getMonth() + 1;
+  dt = now.getDate();
+  dy = now.getDay();
+  h = now.getHours();
+  m = now.getMinutes();
+  s = now.getSeconds();
+  ms = now.getMilliseconds();
+  ss = s + ms / 1000;
+  mm = m + ss / 60;
+  hh = h + mm / 60;
+  cxt.moveTo(0, 0);
+  cxt.lineTo( r * 0.5 * Math.sin( hh * Math.PI / 6 ), - r * 0.5 * Math.cos( hh * Math.PI / 6 ));
+  cxt.moveTo(0, 0);
+  cxt.lineTo( r * 0.8 * Math.sin( mm * Math.PI / 30), - r * 0.8 * Math.cos( mm * Math.PI / 30 ));
+  cxt.moveTo( - r * 0.2 * Math.sin( ss * Math.PI / 30 ), r * 0.2 * Math.cos( ss * Math.PI / 30 ));
+  cxt.lineTo( r * 0.9 * Math.sin( ss * Math.PI / 30 ), - r * 0.9 * Math.cos( ss * Math.PI / 30 ));
+  cxt.stroke();
+  timeBox(h, m, s, ms);
+  dateBox(yr, mo, dt, dy);
+  weatherBox();
+  setTimeout("myClock()", 0);
+}
+function weatherBox()
+{
+  rb = document.getElementById("rightBox");
+  rb.style.fontFamily = "楷体";
+  rb.style.fontSize = Math.min(ww, wh) * 0.1 + "px";
+  rb.style.fontWeight = "bold";
+  rb.style.textAlign = "right";
+  rb.innerHTML = "<br>当前位置 <br><hr>温度 <br><hr>天气 <br><hr>风向&及风力 <br>";
+}
+function dateBox(yr, mo, dt, dy)
+{
+  var day = new Array( "星期日", "星期一 ", "星期二", "星期三", "星期四", "星期五", "星期六" );
+  lb = document.getElementById("leftBox");
+  lb.style.fontFamily = "黑体";
+  lb.style.fontSize = Math.min(ww, wh) * 0.1 + "px";
+  lb.style.fontWeight = "bold";
+  lb.style.textAlign = "right";
+  lb.innerHTML = "<br>" + yr + " 年 <br><hr>" + mo + " 月 <br><hr>" + dt + " 日 <br><hr>" + day[dy] + " <br>";
+}
+function timeBox(h, m, s, ms)
+{
+  bb = document.getElementById("bottomBox");
+  bb.style.fontFamily = "sans-serif";
+  bb.style.fontSize = Math.min(ww, wh) * 0.1 + "px";
+  bb.style.fontWeight = "bold";
+  bb.style.textAlign = "center";
+  bb.innerHTML = h + ":" + (( m < 10 ) ? "0" + m : m ) + ":" + (( s < 10 ) ? "0" + s : s )
+}
+</script>
+</body>
+</html>

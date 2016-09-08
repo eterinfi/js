@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>My Clock</title>
+</head>
+<body onload = "myClock()" style="padding: 0; margin: 0; background-color: silver;">
+  <canvas id = "myCanvas"></canvas>
+  <div id = "myTimeBox"></div>
+<script>
+function myClock()
+{
+  var color = new Array( "red", "olive", "yellow", "green", "lime", "teal", "aqua", "navy", "blue", "purple", "fuchsia", "maroon" );
+  ww = window.innerWidth;
+  wh = window.innerHeight;
+  c = document.getElementById("myCanvas");
+  c.width = ww;
+  c.height = wh * 0.88;
+  cw = c.width / 2;
+  ch = c.height / 2;
+  cxt = c.getContext("2d");
+  maxrad = Math.min(cw, ch);
+  r = maxrad * 0.9;
+  cxt.clearRect(0, 0, c.width, c.height);
+  cxt.fillStyle = "gray";
+  cxt.beginPath();
+  cxt.arc(cw, ch, r, 0, Math.PI * 2, true);
+  cxt.closePath();
+  cxt.fill();
+  cxt.fillStyle = "black";
+  cxt.beginPath();
+  cxt.arc(cw, ch, r * 0.03, 0, Math.PI * 2, true);
+  cxt.closePath();
+  cxt.fill();
+  cxt.lineWidth = r * 0.02;
+  cxt.beginPath();
+  cxt.arc(cw, ch, r, 0, Math.PI * 2, true);
+  cxt.closePath();
+  for (var m = 0; m < 60; m++)
+  {
+    if (m % 5 == 0)
+	  cxt.moveTo( cw + 0.9 * r * Math.sin( m * Math.PI / 30 ), ch - 0.9 * r * Math.cos( m * Math.PI / 30 ));
+	else
+      cxt.moveTo( cw + 0.95 * r * Math.sin( m * Math.PI / 30 ), ch - 0.95 * r * Math.cos( m * Math.PI / 30 ));
+    cxt.lineTo( cw + r * Math.sin( m * Math.PI / 30 ), ch - r * Math.cos( m * Math.PI / 30 ));
+    cxt.stroke();  
+  }
+  for (var h=0; h < 12; h++)
+  {
+	cxt.font = "bold " + r * 0.2 + "px sans-serif";
+	cxt.fillStyle = color[h];
+	cxt.textAlign = "center";
+	cxt.fillText(h, cw + 0.8*r*Math.sin(h*Math.PI/6),ch-0.8*r*Math.cos(h*Math.PI/6)+0.075*r);
+  }
+  cxt.font = "bold " + r * 0.15 + "px '楷体'";
+  cxt.fillStyle = "white";
+  cxt.fillText("网络时钟", cw, ch - 0.4 * r);
+  cxt.fillText("自动校时", cw, ch + 0.5 * r);
+  cxt.fillStyle = "black";
+  now = new Date();
+  h = now.getHours();
+  m = now.getMinutes();
+  s = now.getSeconds();
+  t = now.getTime();
+  ms = t % 1000;
+  ss = s + ms / 1000;
+  mm = m + ss / 60;
+  hh = h + mm / 60;
+  cxt.moveTo(cw,ch);
+  cxt.lineTo(cw+r*0.5*Math.sin(hh*Math.PI/6),ch-r*0.5*Math.cos(hh*Math.PI/6));
+  cxt.moveTo(cw,ch);
+  cxt.lineTo(cw+r*0.8*Math.sin(mm*Math.PI/30),ch-r*0.8*Math.cos(mm*Math.PI/30));
+  cxt.moveTo(cw-r*0.2*Math.sin(ss*Math.PI/30),ch+r*0.2*Math.cos(ss*Math.PI/30));
+  cxt.lineTo(cw+r*0.8*Math.sin(ss*Math.PI/30),ch-r*0.8*Math.cos(ss*Math.PI/30));
+  cxt.stroke();
+  timeBox(h, m, s, ms);
+  setTimeout("myClock()", 0);
+}
+function timeBox(h, m, s, ms)
+{
+  b = document.getElementById("myTimeBox");
+  b.style.width = ww;
+  b.style.height = wh * 0.1;
+  b.style.fontFamily = "sans-serif";
+  b.style.fontSize = r * 0.2 + "px";
+  b.style.fontWeight = "bold";
+  b.style.textAlign = "center";
+  s = Math.round ( s + ms / 1000 ) % 60;
+  b.innerHTML = h + ":" + (( m < 10 ) ? "0" + m : m ) + ":" + (( s < 10 ) ? "0" + s : s )
+}
+</script>
+</body>
+</html>
