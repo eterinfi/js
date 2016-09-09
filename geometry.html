@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>My Pattern</title>
+</head>
+<body>
+  <canvas id = "myCanvas"></canvas>
+<script>
+  c = document.getElementById("myCanvas");
+  c.width = window.innerWidth * 0.9;
+  c.height = window.innerHeight * 0.9;
+  cxt = c.getContext("2d");
+  cx = c.width / 2;
+  cy = c.height / 2;
+  r = 250; d = r * 2;
+  cxt.beginPath();
+  cxt.arc(cx - r, cy, r, 0, Math.PI * 2, true);
+  cxt.stroke();
+  cxt.beginPath();
+  cxt.arc(cx + r, cy, r, 0, Math.PI * 2, true);
+  cxt.stroke();
+  cxt.rect(cx - d, cy - r, d * 2, d);
+  cxt.stroke();
+  cxt.moveTo(cx + d, cy - r);
+  cxt.lineTo(cx - d, cy + r);
+  cxt.stroke();
+  cxt.moveTo(cx, cy);
+  cxt.lineTo(cx - r, cy);
+  cxt.lineTo(cx - r * 1.6, cy + r * 0.8);
+  cxt.stroke();
+  cxt.moveTo(cx - r, cy);
+  cxt.lineTo(cx - r, cy + r);
+  cxt.stroke();
+</script>
+</body>
+</html>

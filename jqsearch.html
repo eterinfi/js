@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>JQSearch</title>
+    <script src="jQuery/jquery-3.1.0.slim.min.js"></script>
+</head>
+<body>
+<form id="test-form">
+    <p><label>Name: <input name="name"></label></p>
+    <p><label>Email: <input name="email"></label></p>
+    <p><label>Password: <input name="password" type="password"></label></p>
+    <p>Gender: <label><input name="gender" type="radio" value="m" checked> Male</label> <label><input name="gender" type="radio" value="f"> Female</label></p>
+    <p><label>City: <select name="city">
+        <option value="BJ" selected>Beijing</option>
+        <option value="SH">Shanghai</option>
+        <option value="CD">Chengdu</option>
+        <option value="XM">Xiamen</option>
+    </select></label></p>
+    <p><button type="button" onclick="check()">Submit</button></p>
+</form>
+<script>
+function check() {
+var json=new Object;
+$(":input[name]").map(function(){
+    if (this.name === "city") {
+        for (var x of this.children) // or this.getElementsByTagName("option") or this.querySelectorAll("option")
+            if (x.selected) // or x.value === this.value
+                json[this.name] = x.innerHTML; // or x.innerText or x.textContent;
+    }
+    else if (this.name === "gender") {
+        if (this.checked)
+            json[this.name] = this.parentElement.innerText.slice(1); // or this.parentElement.textContent.slice(1)
+    }
+    else
+        json[this.name] = this.value;
+ }).get();
+json = JSON.stringify(json);
+if (typeof(json) === 'string') {
+    document.write(json);
+}
+else {
+    document.write('json变量不是string!');
+}
+}
+</script>
+</body>
+</html>

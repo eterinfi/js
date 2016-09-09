@@ -1,0 +1,22 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>My Favourite Browser</title>
+</head>
+<body>
+<form><p>您喜欢哪款浏览器？</p><input name="browser"><input name="browser"><input name="browser"><input name="browser"><p>您喜欢的浏览器是：<input type="text" id="answer" size="20"></p></form>
+<script>
+  var b = new Array("Internet Explorer", "Firefox", "Netscape", "Opera");
+  var f = document.forms[0];
+  Element.prototype.insertAfter = function (iNode, cNode) {
+    this.insertBefore(iNode, cNode.nextSibling); }
+  for(i = 0; i < 4; i++) {
+    f.browser[i].type = "radio";
+    f.browser[i].value = b[i];
+    f.insertAfter(document.createElement("br"), f.browser[i]);
+    f.insertAfter(document.createTextNode(b[i]), f.browser[i]);
+    f.browser[i].onclick = function(){document.forms[0].answer.value=this.value}; }
+  //alert(document.documentElement.innerHTML);
+</script>
+</body>
+</html>
