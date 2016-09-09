@@ -1,0 +1,36 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<script type="text/javascript">
+function loadXMLDoc()
+{
+var xmlhttp;
+var txt,x,i;
+xmlhttp = new XMLHttpRequest();
+xmlhttp.open("GET", "china.xml", false);
+xmlhttp.send();
+alert('readyState: ' + xmlhttp.readyState + ' status code: ' + xmlhttp.status);
+// Parse XML
+xmlDoc = xmlhttp.responseXML;
+txt = '<table width="1332px" rules="rows">';
+txt += '<tr style="font-size: 2em"><th>城市</th><th>天气</th><th>温度</th><th>风向及风力</th></tr>';
+x = xmlDoc.getElementsByTagName("city");
+for (i = 0; i < x.length; i++)
+  {
+    txt += '<tr align="center" style="font-size: 2em"><td>';
+    if (x[i].getAttribute("quName") != x[i].getAttribute("cityname")) txt += x[i].getAttribute("quName") + "-";
+    txt += x[i].getAttribute("cityname") + "</td><td>";
+    txt += x[i].getAttribute("stateDetailed") + "</td><td>";
+    txt += x[i].getAttribute("tem2") + "/";
+    txt += x[i].getAttribute("tem1") + "℃</td><td>";
+    txt += x[i].getAttribute("windState") + "</td></tr>";
+  }
+  txt += "</table>";
+  document.getElementById("myDiv").innerHTML = txt;
+}
+</script>
+</head>
+<body onload="loadXMLDoc()">
+<div id="myDiv"></div>
+</body>
+</html>
